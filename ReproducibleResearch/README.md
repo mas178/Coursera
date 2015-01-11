@@ -1,4 +1,9 @@
+(Japanese)
+
 Corseraの[Reproducible Research](https://www.coursera.org/course/repdata)の1回目のアサインメントです。
 
-This is assignment 1 of Corsera [Reproducible Research](https://www.coursera.org/course/repdata).
+-----------------------------------
 
+(English)
+
+This is 1st assignment of Corsera [Reproducible Research](https://www.coursera.org/course/repdata).
