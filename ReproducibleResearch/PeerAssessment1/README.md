@@ -6,4 +6,4 @@ Corseraの[Reproducible Research](https://www.coursera.org/course/repdata)の1�
 
 (English)
 
-This is 1st assignment of Corsera [Reproducible Research](https://www.coursera.org/course/repdata).
+This is the 1st assignment of Corsera [Reproducible Research](https://www.coursera.org/course/repdata).
