@@ -2,3 +2,9 @@
 
 主に、データサイエンス・機械学習・社会科学系のコースを受講しています。
 
+-----------------------------------------
+
+This repository is for submitting my assignment of [Coursera](https://www.coursera.org/).
+
+I mainly take courses in data science, machine learning and social science.
+
