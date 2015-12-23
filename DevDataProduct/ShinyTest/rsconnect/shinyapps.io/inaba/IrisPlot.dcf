@@ -1,8 +1,8 @@
 name: IrisPlot
 account: inaba
 server: shinyapps.io
-bundleId: 335713
+bundleId: 337291
 url: https://inaba.shinyapps.io/IrisPlot
-when: 1450623188.3594
+when: 1450847880.08644
 asMultiple: FALSE
 asStatic: FALSE

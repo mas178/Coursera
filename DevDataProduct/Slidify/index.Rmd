@@ -1,0 +1,47 @@
+---
+title       : Simple Sample of Slidify
+subtitle    : Overview of "IRIS Plot" Shiny Application
+author      : Masaaki Inaba
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+license: by-sa
+
+--- .segue .quote .dark
+
+## What is this?
+
+<q>"IRIS Plot" is a test application using "shiny". And this slide is also a test slide using "slidify".</q>
+
+<style>
+.dark q {
+  color: white;
+}
+</style>
+
+
+--- .class #id 
+
+## Application Overview
+
+<iframe src = 'https://inaba.shinyapps.io/IrisPlot' height='600px'></iframe>
+
+--- .class #id 
+
+## Data used in the applicaiton
+
+```{r}
+summary(iris)
+```
+
+--- .class #id 
+
+## Source Code
+
+1. [server.R](https://github.com/mas178/Coursera/blob/master/DevDataProduct/ShinyTest/server.R)
+2. [ui.R](https://github.com/mas178/Coursera/blob/master/DevDataProduct/ShinyTest/ui.R)
+3. [index.Rmd](https://github.com/mas178/Coursera/blob/master/DevDataProduct/Slidify/index.Rmd)
+
