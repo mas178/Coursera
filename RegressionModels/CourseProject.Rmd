@@ -1,0 +1,65 @@
+---
+title: "Fuel Consumption and Transmission Type"
+author: "Masaaki Inaba"
+date: "January 16, 2016"
+output:
+  pdf_document:
+    toc: true
+---
+
+# 1. Executive Summary
+
+We work for Motor Trend, a magazine about the automobile industry. Looking at a data set of a collection of cars, they are interested in exploring the relationship between a set of variables and miles per gallon (MPG) (outcome). They are particularly interested in the following two questions:
+
+- Is an automatic or manual transmission better for MPG
+- Quantify the MPG difference between automatic and manual transmissions
+
+# 2. Data Processing
+
+```{r}
+data(mtcars)
+mtcars$am   = factor(mtcars$am)
+mtcars$cyl  = factor(mtcars$cyl)
+mtcars$vs   = factor(mtcars$vs)
+mtcars$gear = factor(mtcars$gear)
+mtcars$carb = factor(mtcars$carb)
+```
+
+# 3. Regression Analysis
+
+## 3.1. We start regression analysis based on intial model which inclueds all variables and choose a best model by AIC in a Stepwise Algorithm.
+
+```{r results = 'hide'}
+initial_model = lm(mpg ~ ., data = mtcars)
+best_model = step(initial_model)
+```
+
+##3.2. The best model is as below:
+
+```{r}
+summary(best_model)
+```
+
+# 4. Conclusion
+
+## Question 1. Is an automatic or manual transmission better for MPG?
+=> Automatic transmission is better than manual transmission for MPG.
+
+## Question 2. Quantify the MPG difference between automatic and manual transmissions.
+=> Manual transmission get 1.80921 more MPG compared to automatic transmission.
+
+# Appendix
+
+## Figure 1. MPG per Transmission
+
+```{r}
+boxplot(mpg ~ am, data = mtcars, main = "MPG per Transmission",
+        xlab = "Transmission (0 = automatic, 1 = manual)", ylab = "MPG")
+```
+
+## Figure 2. Residual Plot and Diagnostics
+
+```{r}
+par(mfrow = c(2, 2))
+plot(best_model)
+```
