@@ -1,0 +1,87 @@
+---
+title: 'Analysis of Weight Lifting Exercises (Practical Machine Learning: Prediction Assignment)'
+author: "Masaaki Inaba"
+date: "January 17, 2016"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+# 1. Executive Summary
+
+## 1.1. Background
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
+
+## 1.2. Objectives
+
+The goal of your project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing:
+
+- how you built your model, (Chapter 3. Model building)
+
+- how you used cross validation, (Chapter 4.1. Create a confusion matrix)
+
+- what you think the expected out of sample error is, and why you made the choices you did. (Chapter 4.2. Out of Sample Error)
+
+You will also use your prediction model to predict 20 different test cases. (Chapter 5. Test)
+
+# 2. Prepare library and data
+
+```{r}
+library(caret)
+library(randomForest)
+
+# Read CSV Data
+if (!exists('data.training')) {
+  data.training = read.csv('./pml-training.csv', na.strings = c("#DIV/0!", "NA"))
+}
+if (!exists('data.testing')) {
+  data.testing = read.csv('./pml-testing.csv', na.strings = c("#DIV/0!", "NA"))
+}
+
+# Omit NA column
+effectiveColumns = sapply(data.training, function (vector) {
+  sum(is.na(vector)) / length(vector) < 0.95
+})
+data.training.effective = data.training[, effectiveColumns]
+
+# Omit irrelevant column
+data.training.effective = data.training.effective[, -c(1:7)]
+
+set.seed(178)
+index.train = createDataPartition(y = data.training.effective$classe, p = 0.75, list = F)
+training = data.training.effective[index.train,]
+testing = data.training.effective[-index.train,]
+```
+
+# 3. Model Building
+
+```{r}
+ctrl_param = trainControl(method = "cv", number = 5, allowParallel = T, verbose = T)
+model_rf = train(classe ~ ., data = training, method = "rf", trControl = ctrl_param, verbose = F)
+model_rf
+```
+
+# 4. Cross Validation
+
+## 4.1. Confusion Matrix
+
+```{r}
+predict_rf = predict(model_rf, newdata = testing)
+confusion_matrix = confusionMatrix(predict_rf, testing$classe)
+confusion_matrix
+```
+
+## 4.2. Out of Sample Error
+```{r}
+1 - confusion_matrix$overall[1]
+```
+
+# 5. Test
+
+```{r}
+predict(model_rf, data.testing)
+```
+
