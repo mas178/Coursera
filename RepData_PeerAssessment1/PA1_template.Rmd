@@ -1,0 +1,58 @@
+# Reproducible Research: Peer Assessment 1
+
+## Loading and preprocessing the data
+```{r echo = TRUE}
+unzip("activity.zip", files = "activity.csv")
+act <- read.csv("activity.csv", colClasses = c("numeric", "Date", "numeric"))
+actExceptNA <- na.omit(act)
+```
+## What is mean total number of steps taken per day?
+```{r echo = TRUE}
+stepsPerDay <- aggregate(actExceptNA$steps, list(actExceptNA$date), sum)
+colnames(stepsPerDay) <- c("Date", "Steps")
+```
+the mean is
+```{r echo = TRUE}
+mean(stepsPerDay$Steps)
+```
+the median is
+```{r echo = TRUE}
+median(stepsPerDay$Steps)
+```
+```{r echo = TRUE}
+hist(stepsPerDay$Steps)
+```
+
+## What is the average daily activity pattern?
+```{r echo = TRUE}
+stepsPer5Min <- aggregate(actExceptNA$steps, list(actExceptNA$interval), mean)
+colnames(stepsPer5Min) <- c("5-minute interval", "Steps")
+plot(stepsPer5Min, type = "l")
+```
+## Imputing missing values
+Fill in na value by median for that day.
+```{r echo = TRUE}
+actFilledIn <- act
+actFilledIn$steps[is.na(actFilledIn$steps)] <- median(stepsPerDay$Steps) / nrow(stepsPer5Min)
+```
+## Are there differences in activity patterns between weekdays and weekends?
+```{r echo = TRUE}
+Sys.setlocale("LC_TIME","C") # for multi byte environment
+actAllday <- data.frame(actFilledIn$steps, weekdays(actFilledIn$date), actFilledIn$interval)
+colnames(actAllday) <- c("steps", "date", "interval")
+
+actWeekday <- subset(actAllday, !date %in% c("Saturday", "Sunday"))
+actWeekend <- subset(actAllday, date %in% c("Saturday", "Sunday"))
+
+stepsWeekday <- aggregate(actWeekday$steps, list(actWeekday$interval), mean)
+stepsWeekend <- aggregate(actWeekend$steps, list(actWeekend$interval), mean)
+colnames(stepsWeekday) <- c("5-minute interval", "Steps")
+colnames(stepsWeekend) <- c("5-minute interval", "Steps")
+
+par(mfrow=c(2, 1))
+plot(stepsWeekday, type = "l", main = "Activity patterns in Weekdays")
+plot(stepsWeekend, type = "l", main = "Activity patterns in Weekends")
+```
+As above graph, there are difference in activity patterns between weekdays and weekends.  
+In weekdays, the activities peek is higher than weekends and it's in AM.  
+In weekends, the activities are scattered from AM to PM.
