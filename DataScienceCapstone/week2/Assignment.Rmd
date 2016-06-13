@@ -1,0 +1,65 @@
+---
+title: "Assignment"
+author: "Masaaki Inaba"
+date: "June 13, 2016"
+output: html_document
+---
+
+# Dataset
+
+The following is our dataset for analysis. The dataset represents corpas of 3 medias (blogs, news and twitter).
+
+We use English version while the dataset include some languages.
+
+```{r}
+url = "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+dataset_file = "./dataset.zip"
+dataset_dir  = "./dataset"
+if (file.access(dataset_file) != 0) {
+  download.file(url, dataset_file)
+  unzip(dataset_file, exdir = dataset_dir)
+}
+
+blog_file    = "./dataset/final/en_US/en_US.blogs.txt"
+news_file    = "./dataset/final/en_US/en_US.news.txt"
+twitter_file = "./dataset/final/en_US/en_US.twitter.txt"
+```
+
+### Overview of corpus
+
+The file size, word count, line count and max length of line are as bellow.
+
+```{r}
+get_file_info = function (file_name) {
+  row_count = 0
+  word_count = 0
+  max_length = 0
+  con = file(file_name, 'r')
+  repeat {
+    row = readLines(con, 1, skipNul = TRUE)
+    if (length(row) == 0) {
+      break
+    }
+    # Row count
+    row_count = row_count + 1
+
+    # Word count
+    x = nchar(row)
+    word_count = word_count + x
+
+    ## Max length
+    max_length = ifelse(x > max_length, x, max_length)
+  }
+  close(con)
+
+  return(list(
+    "File size (MB)"  = file.info(file_name)$size / 1000000,
+    "Line count"  = row_count,
+    "Word count" = word_count,
+    "Max length" = max_length, big.mark=",", scientific=F))
+}
+
+summary_table = sapply(list(blog_file, news_file, twitter_file), get_file_info)
+colnames(summary_table) = c("Blog", "News", "Twitter")
+summary_table
+```
